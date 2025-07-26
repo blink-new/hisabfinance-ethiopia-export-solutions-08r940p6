@@ -24,10 +24,14 @@ const Header = ({ user }: HeaderProps) => {
   const isActive = (path: string) => location.pathname === path
 
   const handleAuth = () => {
-    if (user) {
-      blink.auth.logout()
-    } else {
-      blink.auth.login()
+    try {
+      if (user) {
+        blink.auth.logout()
+      } else {
+        blink.auth.login()
+      }
+    } catch (error) {
+      console.error('Auth error:', error)
     }
   }
 

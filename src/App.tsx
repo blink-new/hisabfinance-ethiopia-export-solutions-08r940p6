@@ -17,11 +17,16 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = blink.auth.onAuthStateChanged((state) => {
-      setUser(state.user)
-      setLoading(state.isLoading)
-    })
-    return unsubscribe
+    try {
+      const unsubscribe = blink.auth.onAuthStateChanged((state) => {
+        setUser(state?.user || null)
+        setLoading(state?.isLoading || false)
+      })
+      return unsubscribe
+    } catch (error) {
+      console.error('Auth state change error:', error)
+      setLoading(false)
+    }
   }, [])
 
   if (loading) {
@@ -44,6 +49,7 @@ function App() {
             <Route path="/stories" element={<ExporterStories />} />
             <Route path="/join" element={<JoinUs />} />
             <Route path="/investors" element={<InvestorNGO />} />
+            <Route path="*" element={<Homepage />} />
           </Routes>
         </main>
         <Footer />
